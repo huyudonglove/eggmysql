@@ -1,0 +1,11 @@
+node_modules
+logs
+dist
+run
+.DS_Store
+test
+.idea/
+.vscode
+.project
+build/
+package-lock.json

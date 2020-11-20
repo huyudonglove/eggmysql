@@ -1,5 +1,5 @@
 const Controller = require('egg').Controller
-class HomeController extends Controller {
+class getBuyTypeController extends Controller {
     async index() {
         const client1 = await this.app.mysql.get('login_name',{id:1});
          // console.log(this.app.mysql)
@@ -7,4 +7,4 @@ class HomeController extends Controller {
         this.ctx.body = "Hello World!"
     }
 }
-module.exports = HomeController
+module.exports = getBuyTypeController

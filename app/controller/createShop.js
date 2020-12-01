@@ -8,32 +8,51 @@ class createShopController extends Controller {
             type:'',
             sellnumber:'',
             image:'',
-            buyid:''
+            buyid:'',
+            sellRole:'',
+            memberName:'',
+            memberPhone:'',
         }
-        console.log(body,999)
+    
         msg.selltime=body.time;
         msg.type=body.type;
         msg.sellpice=body.pice;
         msg.sellnumber=body.num;
-        const buyMsg=await this.app.mysql.get('buylist',{id:body.buyId});
-        console.log(buyMsg,9999);
         msg.buyid=body.buyId;
+        msg.sellRole=JSON.stringify(body.sellRole);//销售人员
+        msg.memberName=body.memberName;
+        msg.memberPhone=body.memberPhone;
+        console.log(msg,789);
+        //获取进货信息
+        const buyMsg=await this.ctx.service.buylist.find(body.buyId);
         msg.image=buyMsg.image;
-        const res=await this.app.mysql.insert('selllist',msg);
+        //增加销售记录
+        const res=await this.ctx.service.selllist.add(msg);
+        //更改库存
+        const sellMsg=await this.ctx.service.selllist.find({buyid:body.buyId});
+        console.log(sellMsg,889778);
+         let allnum=0;
+         let allpice=0;
+        if(sellMsg.length){
+            sellMsg.map(v=>{
+                allnum+=v.sellnumber*1;
+                allpice+=v.sellpice*1;
+            })
+        }
         let sell={
             remainingpice:'',
             nownum:''
         }
-        let options={
-            where:{
-                buyid:buyMsg.id
-            }
+        let options={  buyid:buyMsg.id };
+        sell.remainingpice=allpice;
+        sell.nownum=buyMsg.number-allnum;
+       // const re=await this.app.mysql.update('stocklist',sell,{where:options})
+       const re =await this.ctx.service.stocklist.update(sell,options)
+        this.ctx.body = {
+            code:0,
+            data:null,
+            msg:'success'
         }
-        sell.remainingpice=buyMsg.totalpice-msg.sellpice;
-        sell.nownum=buyMsg.number-msg.sellnumber;
-        sell.buyid=buyMsg.id;
-        const re=await this.app.mysql.update('stocklist',sell,options)
-        this.ctx.body = "Hello World!"
     }
 }
 module.exports = createShopController

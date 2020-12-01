@@ -3,7 +3,7 @@ class getShopController extends Controller {
     async index() {
         const client = await this.app.mysql.select('selllist');
          // console.log(this.app.mysql)
-        console.log(client,777)
+        //console.log(client,777)
         this.ctx.body = {
             code:0,
             data:client,

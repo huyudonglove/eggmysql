@@ -1,18 +1,8 @@
 const Controller = require('egg').Controller
 class createbuyController extends Controller {
     async index() {
-        function formatDate(date) {
-            var date = new Date(date);
-            var YY = date.getFullYear() + '-';
-            var MM = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-            var DD = (date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate());
-            var hh = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':';
-            var mm = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':';
-            var ss = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds());
-            return YY + MM + DD +" "+hh + mm + ss;
-          }
         let msg={
-            buytime:formatDate(new Date().getTime()),
+            buytime:null,
             number:1,
             type:0,
             image:0,
@@ -25,6 +15,7 @@ class createbuyController extends Controller {
         msg.buypice=body.buypice;
         msg.totalpice=body.totalpice;
         msg.image=body.image;
+        msg.buytime=body.buytime;
         let stockMsg={
             type:body.type,
             image:body.image,
@@ -33,6 +24,21 @@ class createbuyController extends Controller {
             nownum:body.number,
             buyid:0,
             buytime:''
+        }
+        //先查询是否有重名再插入数据
+        let op={
+            where:{
+                type:body.type
+            }
+        }
+        const isExit= await this.app.mysql.select('buylist',op);
+        console.log(isExit,777777);
+        if(isExit.length){
+            this.ctx.body={
+                code:1,
+                msg:'该型号已经存在，请重新输入'
+            }
+            return;
         }
         const result=await this.app.mysql.insert('buylist',msg);
         const buyT=await this.app.mysql.get('buylist',{type:body.type});

@@ -1,30 +1,30 @@
 const Service = require('egg').Service;
+const mysql='stocklist';
 class stocklistServices extends Service{
     async add(msg){
-        const res=await this.app.mysql.insert('stocklist',msg)
+        const res=await this.app.mysql.insert(mysql,msg)
         return res;
     }
     async delete(){
 
     }
-    async update(type,msg){
-        if(type=='buy'){
-            const options={
-                where:{
-                    buyid:msg.buyid
-                }
-            }
+    async update(msg,option){
+        if(option){
+            let options={
+                        where:option
+                    }
             const res=await this.app.mysql.update('stocklist',msg,options);
-            return res;
-        }else{
-            const res=await this.app.mysql.update('stocklist',msg);
-            return res;
+             return res;
         }
         
     }
-    async find(id){
-        if(id){
-
+    async find(msg){
+        if(msg){
+            let options={
+                where:msg
+            }
+            const res=await this.app.mysql.select(mysql,options)
+            return res;
         }
     }
 }

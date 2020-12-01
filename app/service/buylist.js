@@ -13,7 +13,8 @@ class buylistServices extends Service{
     }
     async find(id){
         if(id){
-
+            const res=await this.app.mysql.get('buylist',{id:id})
+            return res;
         }
     }
 }

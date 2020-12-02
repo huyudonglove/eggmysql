@@ -1,11 +1,3 @@
-// exports.keys = 'mycookie';
-// module.exports = {
-//     security: {
-//       csrf: {
-//         ignoreJSON: true, // 默认为 false，当设置为 true 时，将会放过所有 content-type 为 `application/json` 的请求
-//       },
-//     },
-//   };
   module.exports=appInfo=>{
       const config={};
       config.keys='123456';
@@ -16,7 +8,7 @@
       config.mysql={
         client: {
             // host
-            host: '10.10.26.58',
+            host: '182.254.241.46',
             // 端口号
             port: '3306',
             // 用户名

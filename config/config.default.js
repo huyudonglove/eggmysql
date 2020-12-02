@@ -8,13 +8,13 @@
       config.mysql={
         client: {
             // host
-            host: '182.254.241.46',
+            host: '',
             // 端口号
             port: '3306',
             // 用户名
             user: 'root',
             // 密码
-            password: '123456',
+            password: '',
             // 数据库名
             database: 'shop',
           },
